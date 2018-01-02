@@ -2,7 +2,7 @@ const cp = require('child_process');
 
 const mmap = require('mmap-io');
 
-const shm = require('./build/Release/posix_shm');
+const shm = require('./build/Release/shmmap');
 
 let s_prefix = '/lw';
 let i_key = Math.floor(Math.random()*1e12);

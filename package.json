@@ -1,8 +1,14 @@
 {
     "name": "shmmap",
-    "description": "shm_open, shm_unlink and ftruncate combined with POSIX mmap",
+    "description": "Native bindings for creating Buffers atop shared memory in node.js",
+    "keywords": [
+        "shm",
+        "shared memory",
+        "IPC",
+        "mmap"
+    ],
     "license": "MIT",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "main": "module.js",
     "repository": {
         "type": "git",
