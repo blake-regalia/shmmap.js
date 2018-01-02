@@ -1,0 +1,7 @@
+node_modules
+scrap
+dist
+lib/debug
+coverage
+build
+.git-dev
