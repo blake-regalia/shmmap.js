@@ -2,6 +2,10 @@
 
 Native bindings for [mmap](https://en.wikipedia.org/wiki/Mmap) complemented with [POSIX shm](http://man7.org/linux/man-pages/man7/shm_overview.7.html) for creating (and safely destroying) actual shared memory segments for sharing large data between node.js processes beneath things like Buffer / Uint8Array.
 
+```bash
+$ npm install --save shmmap
+```
+
 ## Example
 In *parent.js*:
 ```js
