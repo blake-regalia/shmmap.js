@@ -37,10 +37,10 @@ const self = module.exports = {
 	release(s_key) {
 		if(h_creates[s_key]) {
 			shm.unlink(s_key);
-                        fs.close(h_creates[s_key]);
+                        fs.closeSync(h_creates[s_key]);
 			delete h_creates[s_key];
 		} else if (h_attach[s_key]) {
-                        fs.close(h_attach[s_key]);
+                        fs.closeSync(h_attach[s_key]);
 			delete h_attach[s_key];
                 }
 	},
