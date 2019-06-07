@@ -21,24 +21,27 @@ const char* to_c_str(const String::Utf8Value& value) {
 
 
 #if (NODE_MODULE_VERSION < NODE_0_12_MODULE_VERSION)
-NAN_INLINE v8::Local<v8::Value> NanThrowErrno(int errorno,
-                                              const char *syscall = NULL,
-                                              const char *msg = "",
-                                              const char *path = NULL) {
-  do {
-    Nan::HandleScope();
-    return v8::Local<v8::Value>::New(node::ErrnoException(errorno, syscall, msg, path));
-  } while (0);
+NAN_INLINE v8::Local<v8::Value> NanThrowErrno(
+	int errorno,
+	const char *syscall = NULL,
+	const char *msg = "",
+	const char *path = NULL
+) {
+	do {
+		Nan::HandleScope();
+		return v8::Local<v8::Value>::New(node::ErrnoException(errorno, syscall, msg, path));
+	} while (0);
 }
 #else
 NAN_INLINE void NanThrowErrno(int errorno,
-                              const char *syscall = NULL,
-                              const char *msg = "",
-                              const char *path = NULL) {
-  do {
-    Nan::HandleScope();
-    v8::Isolate::GetCurrent()->ThrowException(node::ErrnoException(errorno, syscall, msg, path));
-  } while (0);
+	const char *syscall = NULL,
+	const char *msg = "",
+	const char *path = NULL
+) {
+	do {
+		Nan::HandleScope();
+		v8::Isolate::GetCurrent()->ThrowException(node::ErrnoException(errorno, syscall, msg, path));
+	} while (0);
 }
 #endif
 
