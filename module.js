@@ -88,6 +88,9 @@ const self = module.exports = {
 
 process.on('exit', () => {
 	// close all fds
+	for(let s_key in h_creates) {
+		self.release(s_key);
+	}
 	for(let s_key in h_attach) {
 		self.release(s_key);
 	}
