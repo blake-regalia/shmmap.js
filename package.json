@@ -15,7 +15,7 @@
         "url": "https://github.com/blake-regalia/shmmap.js"
     },
     "dependencies": {
-        "mmap-io": "^1.1.0",
+        "mmap-io": "^1.1.7",
         "nan": "^2.14.0"
     }
 }

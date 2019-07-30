@@ -15,7 +15,29 @@
 using namespace v8;
 
 
-const char* to_c_str(const String::Utf8Value& value) {
+/**
+ * Make it simpler the next time V8 breaks API's and such with a wrapper fn...
+ */
+template <typename T, typename VT>
+inline auto get_v(VT v8_value) -> T {
+	return Nan::To<T>(v8_value).FromJust();
+}
+
+/**
+* Make it simpler the next time V8 breaks API's and such with a wrapper fn...
+*/
+template <typename T, typename VT>
+inline auto get_v(VT v8_value, T default_value) -> T {
+	return Nan::To<T>(v8_value).FromMaybe(default_value);
+}
+
+template <typename VT>
+inline auto get_obj(VT v8_obj) -> Local<Object> {
+	return Nan::To<Object>(v8_obj).ToLocalChecked();
+}
+
+
+const char* to_c_str(const Nan::Utf8String& value) {
 	return *value? *value: "<string conversion failed>";
 }
 
@@ -47,16 +69,19 @@ NAN_INLINE void NanThrowErrno(int errorno,
 
 
 NAN_METHOD(open) {
+	Nan::HandleScope();
+
 	if(info.Length() != 3
 		|| !info[0]->IsString()
 		|| !info[1]->IsUint32()
 		|| !info[2]->IsUint32()
 	) return Nan::ThrowError("open() expects 3 args: (name: string, open_flags: uint and mode: uint)");
 
-	const int xm_flags = info[1]->Uint32Value();
-	const mode_t x_mode = info[2]->Uint32Value();
+	const int xm_flags = get_v<int>(info[1], 0);
+	const mode_t x_mode = get_v<int>(info[2], 0);
 
-	String::Utf8Value s_name(info[0]->ToString());
+	// String::Utf8Value s_name(info[0]->ToString(v8::Isolate::GetCurrent()));
+	Nan::Utf8String s_name(info[0]);
 	const char* sc_name = to_c_str(s_name);
 
 	int if_shm = shm_open(sc_name, xm_flags, x_mode);
@@ -72,8 +97,8 @@ NAN_METHOD(resize) {
 		|| !info[1]->IsUint32()
 	) return Nan::ThrowError("size() expects 2 args: (fd: uint, size: uint)");
 
-	const int if_shm = info[0]->Uint32Value();
-	const off_t nb_shm = info[1]->Uint32Value();
+	const int if_shm = get_v<int>(info[0], 0);
+	const off_t nb_shm = get_v<int>(info[1], 0);
 
 	int ib_truncate = ftruncate(if_shm, nb_shm);
 
@@ -82,11 +107,14 @@ NAN_METHOD(resize) {
 
 
 NAN_METHOD(unlink) {
+	Nan::HandleScope();
+
 	if(info.Length() != 1
 		|| !info[0]->IsString()
 	) return Nan::ThrowError("unlink() expects 1 arg: (name: string)");
 
-	String::Utf8Value s_name(info[0]->ToString());
+	// String::Utf8Value s_name(info[0]->ToString(v8::Isolate::GetCurrent()));
+	Nan::Utf8String s_name(info[0]);
 	const char* sc_name = to_c_str(s_name);
 
 	int ib_unlink = shm_unlink(sc_name);
